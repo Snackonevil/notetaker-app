@@ -1,0 +1,24 @@
+{
+  "name": "notetaker-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Snackonevil/notetaker-app.git"
+  },
+  "keywords": [],
+  "author": "Kevin Lacson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Snackonevil/notetaker-app/issues"
+  },
+  "homepage": "https://github.com/Snackonevil/notetaker-app#readme",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
