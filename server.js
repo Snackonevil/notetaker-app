@@ -29,26 +29,26 @@ app.post('/api/notes', (req, res) => {
     const newNote = {
       title,
       text,
-      id: 2,
+      id: 2, // need to make more dynamic with uuid
     };
+
     console.log(newNote);
+
     fs.readFile(path.join(__dirname, 'db/db.json'), function (err, data) {
       let note = JSON.parse(data);
       note.push(newNote);
+
       fs.writeFile(
         path.join(__dirname, 'db/db.json'),
         JSON.stringify(note),
         err => console.log(err)
       );
     });
-    // fs.appendFile(
-    //   path.join(__dirname, 'db/db.json'),
-    //   JSON.stringify(newNote),
-    //   err => console.log(err)
-    // );
   } else {
-    res.statusMessage(500).json('Server Error in posting note');
+    res.status(500).json('Server Error in posting note');
   }
 });
+
+app.delete('/api/notes/:id', (req, res) => {});
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}...`));
