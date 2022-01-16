@@ -3,7 +3,6 @@ const path = require('path');
 const fs = require('fs');
 const { v4: uuid } = require('uuid');
 const noteData = require('./db/db.json');
-const { runInNewContext } = require('vm');
 
 const app = express();
 app.use(express.static('public'));
@@ -46,6 +45,7 @@ app.post('/api/notes', (req, res) => {
       );
     });
     res.status(201);
+    res.json(noteData);
   } else {
     res.status(500).json('Server Error in posting note');
   }
@@ -63,6 +63,7 @@ app.delete('/api/notes/:id', (req, res) => {
         err =>
           err ? console.log(err) : console.log(`Note with ID ${delId} deleted`)
       );
+      res.json(noteData);
     } else {
       console.log(`Note with ID ${delId} not found`);
     }
