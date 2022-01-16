@@ -1,8 +1,8 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const { v4: uuid } = require('uuid');
 const noteData = require('./db/db.json');
-// const uuid = require('uuid');
 
 const app = express();
 app.use(express.static('public'));
@@ -29,7 +29,7 @@ app.post('/api/notes', (req, res) => {
     const newNote = {
       title,
       text,
-      id: 2, // need to make more dynamic with uuid
+      id: uuid(),
     };
 
     console.log(newNote);
