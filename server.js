@@ -45,7 +45,7 @@ app.post('/api/notes', (req, res) => {
       );
     });
     res.status(201);
-    res.json(noteData);
+    res.json(newNote);
   } else {
     res.status(500).json('Server Error in posting note');
   }
