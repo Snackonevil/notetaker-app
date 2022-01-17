@@ -61,7 +61,9 @@ app.delete('/api/notes/:id', (req, res) => {
   let delId = req.params.id;
   if (noteData.some(note => note.id == delId)) {
     // if (noteData.some(note => note.id == delId)) {
-    let filtered = noteData.filter(note => note.id !== delId);
+    let data = fs.readFileSync(path.join(__dirname, '/db/db.json'));
+    let notes = JSON.parse(data);
+    let filtered = notes.filter(note => note.id !== delId);
     fs.writeFile(
       path.join(__dirname, '/db/db.json'),
       JSON.stringify(filtered),
