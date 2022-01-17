@@ -4,6 +4,7 @@ const fs = require('fs');
 const { v4: uuid } = require('uuid');
 let noteData = require('./db/db.json');
 const { CLIENT_RENEG_WINDOW } = require('tls');
+const { del } = require('express/lib/application');
 
 const app = express();
 app.use(express.static('public'));
@@ -58,8 +59,8 @@ app.post('/api/notes', (req, res) => {
 
 app.delete('/api/notes/:id', (req, res) => {
   let delId = req.params.id;
-
   if (noteData.some(note => note.id == delId)) {
+    // if (noteData.some(note => note.id == delId)) {
     let filtered = noteData.filter(note => note.id !== delId);
     fs.writeFile(
       path.join(__dirname, '/db/db.json'),
@@ -69,18 +70,6 @@ app.delete('/api/notes/:id', (req, res) => {
           ? console.log(err)
           : console.log(`Note with ID ${delId} was deleted`)
     );
-
-    // fs.readFile(path.join(__dirname, './db/db.json'), (err, data) => {
-    //   let noteData = JSON.parse(data);
-    //   if (noteData.some(note => note.id == delId)) {
-    //     let filtered = noteData.filter(note => note.id !== delId);
-    //     fs.writeFile(
-    //       path.join(__dirname, '/db/db.json'),
-    //       JSON.stringify(filtered),
-    //       err =>
-    //         err ? console.log(err) : console.log(`Note with ID ${delId} deleted`)
-    //     );
-    res.status(201).json(filtered);
   } else {
     console.log(`Note with ID ${delId} not found`);
   }
