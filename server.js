@@ -2,7 +2,8 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 const { v4: uuid } = require('uuid');
-const noteData = require('./db/db.json');
+let noteData = require('./db/db.json');
+const { CLIENT_RENEG_WINDOW } = require('tls');
 
 const app = express();
 app.use(express.static('public'));
@@ -33,17 +34,22 @@ app.post('/api/notes', (req, res) => {
     };
 
     console.log(newNote);
+    noteData.push(newNote);
+    fs.writeFile(
+      path.join(__dirname, '/db/db.json'),
+      JSON.stringify(noteData),
+      err => (err ? console.log(err) : console.log('Note Saved'))
+    );
+    // fs.readFile(path.join(__dirname, 'db/db.json'), function (err, data) {
+    //   let note = JSON.parse(data);
+    //   note.push(newNote);
 
-    fs.readFile(path.join(__dirname, 'db/db.json'), function (err, data) {
-      let note = JSON.parse(data);
-      note.push(newNote);
-
-      fs.writeFile(
-        path.join(__dirname, 'db/db.json'),
-        JSON.stringify(note),
-        err => (err ? console.log(err) : console.log('Note saved'))
-      );
-    });
+    //   fs.writeFile(
+    //     path.join(__dirname, 'db/db.json'),
+    //     JSON.stringify(note),
+    //     err => (err ? console.log(err) : console.log('Note saved'))
+    //   );
+    // });
     res.status(201).json(newNote);
   } else {
     res.status(500).json({ err: 'Server error', msg: 'Note not posted' });
@@ -52,21 +58,32 @@ app.post('/api/notes', (req, res) => {
 
 app.delete('/api/notes/:id', (req, res) => {
   let delId = req.params.id;
-  fs.readFile(path.join(__dirname, './db/db.json'), (err, data) => {
-    let noteData = JSON.parse(data);
-    if (noteData.some(note => note.id == delId)) {
-      let filtered = noteData.filter(note => note.id !== delId);
-      fs.writeFile(
-        path.join(__dirname, '/db/db.json'),
-        JSON.stringify(filtered),
-        err =>
-          err ? console.log(err) : console.log(`Note with ID ${delId} deleted`)
-      );
-      res.status(201).json(filtered);
-    } else {
-      console.log(`Note with ID ${delId} not found`);
-    }
-  });
+
+  if (noteData.some(note => note.id == delId)) {
+    let filtered = noteData.filter(note => note.id !== delId);
+    fs.writeFile(
+      path.join(__dirname, '/db/db.json'),
+      JSON.stringify(filtered),
+      err =>
+        err
+          ? console.log(err)
+          : console.log(`Note with ID ${delId} was deleted`)
+    );
+
+    // fs.readFile(path.join(__dirname, './db/db.json'), (err, data) => {
+    //   let noteData = JSON.parse(data);
+    //   if (noteData.some(note => note.id == delId)) {
+    //     let filtered = noteData.filter(note => note.id !== delId);
+    //     fs.writeFile(
+    //       path.join(__dirname, '/db/db.json'),
+    //       JSON.stringify(filtered),
+    //       err =>
+    //         err ? console.log(err) : console.log(`Note with ID ${delId} deleted`)
+    //     );
+    res.status(201).json(filtered);
+  } else {
+    console.log(`Note with ID ${delId} not found`);
+  }
 });
 
 app.listen(PORT, () => console.log(`Server started on port ${PORT}...`));
