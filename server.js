@@ -44,10 +44,9 @@ app.post('/api/notes', (req, res) => {
         err => (err ? console.log(err) : console.log('Note saved'))
       );
     });
-    res.status(201);
-    res.json(newNote);
+    res.status(201).json(newNote);
   } else {
-    res.status(500).json('Server Error in posting note');
+    res.status(500).json({ err: 'Server error', msg: 'Note not posted' });
   }
 });
 
@@ -63,7 +62,7 @@ app.delete('/api/notes/:id', (req, res) => {
         err =>
           err ? console.log(err) : console.log(`Note with ID ${delId} deleted`)
       );
-      res.json(noteData);
+      res.status(201).json(filtered);
     } else {
       console.log(`Note with ID ${delId} not found`);
     }
