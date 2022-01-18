@@ -48,21 +48,17 @@ app.post("/api/notes", (req, res) => {
 
 app.delete("/api/notes/:id", (req, res) => {
     let delId = req.params.id;
-    if (noteData.some(note => note.id == delId)) {
-        // if (noteData.some(note => note.id == delId)) {
-        let data = fs.readFileSync(path.join(__dirname, "/db/db.json"));
-        let notes = JSON.parse(data);
+    let data = fs.readFileSync(path.join(__dirname, "/db/db.json"));
+    let notes = JSON.parse(data);
+    if (notes.some(note => note.id == delId)) {
         let filtered = notes.filter(note => note.id !== delId);
-        fs.writeFilesync(
+        fs.writeFileSync(
             path.join(__dirname, "/db/db.json"),
-            JSON.stringify(filtered),
-            err =>
-                err
-                    ? console.log(err)
-                    : console.log(`Note with ID ${delId} was deleted`)
+            JSON.stringify(filtered)
         );
-        res.status(202);
+        res.status(202).json({ Message: `Note with ID ${delId} deleted` });
     } else {
+        res.status(404).json({ Message: `Note with ID ${delId} not found` });
         console.log(`Note with ID ${delId} not found`);
     }
 });
