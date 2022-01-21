@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs");
 const { v4: uuid } = require("uuid");
 
-// Import JSON file functiong as database
+// Import JSON file functioning as database
 let noteData = require("./db/db.json");
 
 // Initialize express
@@ -20,6 +20,10 @@ const dbPath = path.join(__dirname, "/db/db.json");
 // PORT variable in production and development environments
 const PORT = process.env.PORT || 3000;
 
+// =========================================================
+//  SERVE FRONT-END
+// =========================================================
+
 // GET request
 // Sends index.html
 app.get("/", (req, res) => {
@@ -32,9 +36,13 @@ app.get("/notes", (req, res) => {
     res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
+// =========================================================
+//  API
+// =========================================================
+
 // GET request
 // Sends json data from database
-app.get("/api/notes", (req, res) => res.json(noteData));
+app.get("/api/notes", (req, res) => res.status(200).json(noteData));
 
 // POST request
 // Add new note to database
@@ -43,11 +51,17 @@ app.post("/api/notes", (req, res) => {
 
     const { title, text } = req.body;
 
-    if (title && text) {
+    // Validate required data is present
+    if (!title || !text) {
+        res.status(404).json({
+            err: "Bad request",
+            msg: "Note must have title AND body",
+        });
+    } else {
         const newNote = {
             title,
             text,
-            id: uuid(),
+            id: uuid(), // Sets unique identifier
         };
 
         noteData.push(newNote);
@@ -56,8 +70,6 @@ app.post("/api/notes", (req, res) => {
         );
 
         res.status(201).json(newNote);
-    } else {
-        res.status(500).json({ err: "Server error", msg: "Note not posted" });
     }
 });
 

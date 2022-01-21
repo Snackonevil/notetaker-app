@@ -10,7 +10,9 @@ GitHub: [Snackonevil](https://github.com/Snackonevil)
 ## Description
 
 A simple app that saves notes, utlizing a mock database json file as a back end built with Express.js.  
-Launched to Heroku
+Launched to Heroku.
+
+This is my note taker app. There are many like it, but this one is mine. My note taker app is my best friend. It is my life. I must master... oh whoa, sorry, I blacked out.
 
 [The CODE](https://github.com/Snackonevil/notetaker-app) | [The APP](https://lacson-note-taker-app.herokuapp.com/)
 
