@@ -30,6 +30,9 @@ This is my note taker app. There are many like it, but this one is mine. My note
 
 When note title and note body inputs are filled, save button appears in the top right, click to save when ready. Notes are available on left panel.
 
+![homepage-screenshot](./img/note-taker-home-screenshot.PNG)  
+![usage-screenshot](./img/note-taker-usage-screenshot.PNG)
+
 ---
 
 ## License
